@@ -1,0 +1,48 @@
+{
+  "name": "wildman-ai-repair-hub",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:generate": "prisma generate",
+    "db:init": "prisma generate && tsx scripts/init-db.ts",
+    "db:seed": "prisma db seed",
+    "db:reset": "tsx scripts/reset-demo.ts",
+    "demo:setup": "npm run db:init && npm run db:seed",
+    "screenshots": "node scripts/capture-screenshots.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.3",
+    "date-fns": "4.1.0",
+    "lucide-react": "0.468.0",
+    "next": "15.5.20",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "recharts": "2.15.4",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.30",
+    "@types/react": "19.1.8",
+    "@types/react-dom": "19.1.6",
+    "eslint": "8.57.1",
+    "eslint-config-next": "15.5.20",
+    "playwright": "1.55.1",
+    "prisma": "6.19.3",
+    "tsx": "4.20.5",
+    "typescript": "5.8.3",
+    "vitest": "3.2.7"
+  },
+  "overrides": {
+    "postcss": "8.5.10"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  }
+}

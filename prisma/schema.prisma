@@ -1,0 +1,185 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Store {
+  id          String       @id
+  code        String       @unique
+  name        String
+  region      String
+  type        String
+  address     String
+  managerName String
+  phone       String
+  status      String
+  isDemo      Boolean      @default(true)
+  assets      Asset[]
+  faultEvents FaultEvent[]
+}
+
+model Asset {
+  id                String              @id
+  code              String              @unique
+  name              String
+  storeId           String
+  category          String
+  model             String
+  location          String
+  defaultPartyId    String?
+  warrantyStatus    String
+  warrantyEndDate   DateTime?
+  operationalStatus String
+  isDemo            Boolean             @default(true)
+  store             Store               @relation(fields: [storeId], references: [id])
+  defaultParty      ResponsibilityParty? @relation(fields: [defaultPartyId], references: [id])
+  faultEvents       FaultEvent[]
+  workOrders        WorkOrder[]
+
+  @@index([storeId])
+}
+
+model ResponsibilityParty {
+  id                String        @id
+  code              String        @unique
+  name              String
+  type              String
+  serviceCategories String
+  serviceRegions    String
+  contactName       String
+  contactPhone      String
+  status            String
+  isDemo            Boolean       @default(true)
+  assets             Asset[]
+  routingRules       RoutingRule[]
+  recommendedOrders WorkOrder[]   @relation("RecommendedParty")
+  finalOrders        WorkOrder[]   @relation("FinalParty")
+}
+
+model RoutingRule {
+  id                       String              @id
+  code                     String              @unique
+  name                     String
+  enabled                  Boolean             @default(true)
+  priority                 Int
+  assetCategories          String
+  faultCategories          String
+  riskTags                 String
+  warrantyCondition        String
+  regions                  String
+  responsibilityPartyId    String?
+  priorityLevel            String
+  acceptanceSlaSeconds     Int
+  requiresHumanReview      Boolean             @default(false)
+  notifyOps                Boolean             @default(false)
+  explanation              String
+  isDemo                   Boolean             @default(true)
+  responsibilityParty      ResponsibilityParty? @relation(fields: [responsibilityPartyId], references: [id])
+}
+
+model FaultEvent {
+  id                    String      @id
+  code                  String      @unique
+  storeId               String
+  assetId               String?
+  originalDescription   String
+  attachmentUrls        String
+  occurredAtText        String
+  productionImpact      String
+  businessImpact        String
+  userRiskTags          String
+  reporterName          String
+  status                String
+  aiResultJson          String
+  aiHistoryJson         String      @default("[]")
+  aiSummary             String
+  aiFaultCategory       String
+  aiPrioritySuggestion  String
+  aiConfidence          String
+  missingFields         String
+  followUpQuestions     String
+  requiresHumanReview   Boolean
+  supplementText        String?
+  analysisVersion       Int         @default(1)
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+  isDemo                Boolean     @default(true)
+  store                 Store       @relation(fields: [storeId], references: [id])
+  asset                 Asset?      @relation(fields: [assetId], references: [id])
+  workOrder             WorkOrder?
+
+  @@index([storeId, status])
+}
+
+model WorkOrder {
+  id                    String               @id
+  code                  String               @unique
+  faultEventId          String               @unique
+  assetId               String
+  finalFaultCategory    String
+  finalPriority         String
+  recommendedPartyId    String?
+  finalPartyId          String?
+  routeExplanation      String
+  routeTraceJson        String
+  manuallyReviewed      Boolean              @default(false)
+  manualReviewReason    String?
+  status                String
+  slaStatus             String
+  dispatchedAt          DateTime?
+  acceptanceDeadline    DateTime?
+  acceptedAt            DateTime?
+  repairStartedAt       DateTime?
+  repairCompletedAt     DateTime?
+  acceptanceAt          DateTime?
+  closedAt              DateTime?
+  repairCause           String?
+  repairAction          String?
+  partsUsed             String?
+  acceptanceResult      String?
+  acceptanceComment     String?
+  rejectionReason       String?
+  returnCount           Int                  @default(0)
+  repeatedFault         Boolean              @default(false)
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  isDemo                Boolean              @default(true)
+  faultEvent            FaultEvent           @relation(fields: [faultEventId], references: [id])
+  asset                 Asset                @relation(fields: [assetId], references: [id])
+  recommendedParty      ResponsibilityParty? @relation("RecommendedParty", fields: [recommendedPartyId], references: [id])
+  finalParty            ResponsibilityParty? @relation("FinalParty", fields: [finalPartyId], references: [id])
+  stateEvents           StateEvent[]
+  notifications         NotificationLog[]
+
+  @@index([status, finalPriority])
+}
+
+model StateEvent {
+  id          String    @id
+  workOrderId String
+  fromStatus  String
+  toStatus    String
+  actorRole   String
+  actorName   String
+  reason      String
+  timestamp   DateTime  @default(now())
+  workOrder   WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+
+  @@index([workOrderId, timestamp])
+}
+
+model NotificationLog {
+  id          String    @id
+  workOrderId String
+  channel     String
+  recipient   String
+  type        String
+  content     String
+  sentAt      DateTime  @default(now())
+  isDemo      Boolean   @default(true)
+  workOrder   WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+}

@@ -1,0 +1,10 @@
+.DS_Store
+node_modules
+.next
+.env
+prisma/dev.db
+prisma/dev.db-journal
+test-results
+screenshots
+*.log
+*.tsbuildinfo
