@@ -21,7 +21,7 @@
 
 - Node.js 20 或更高；
 - npm 10 或更高；
-- 无需外部数据库；
+- 本地开发无需外部数据库（生产部署使用 Neon PostgreSQL）；
 - 无需模型 API 密钥；
 - 无需飞书或其他第三方账号。
 
@@ -37,10 +37,170 @@ npm run dev
 打开 [http://localhost:3000](http://localhost:3000)。
 
 如果本地已有 `.env`，无需重复复制。
+## 部署上线
+
+本项目生产环境部署在 **Vercel + Neon PostgreSQL**，通过 GitHub 仓库自动触发。
+
+### 架构概览
+
+```
+GitHub (lzllzllzllzllzl/Wildman-Repair-Hub)
+        | push 触发自动部署
+        v
+Vercel (Next.js 15 serverless)
+        | DATABASE_URL
+        v
+Neon PostgreSQL 17 (aws-us-east-1)
+```
+
+| 组件 | 地址 | 说明 |
+|---|---|---|
+| 生产站点 | https://wildman-repair-demo.vercel.app/ | Vercel 托管，main 分支推送即部署 |
+| 源码仓库 | https://github.com/lzllzllzllzllzl/Wildman-Repair-Hub | 公开仓库 |
+| 数据库 | Neon PostgreSQL 17 | 项目 autumn-wind-69981685，库 neondb |
+
+### 前置要求
+
+- Node.js 20+ / npm 10+
+- Vercel CLI：npm i -g vercel
+- Neon CLI：npm i -g neon
+- 一个 GitHub 账号、一个 Vercel 账号、一个 Neon 账号
+
+### 第一步：创建 Neon 数据库
+
+```bash
+# 登录 Neon（浏览器完成 OAuth）
+neon auth
+
+# 列出已有组织
+neon orgs list
+
+# 创建项目（自动生成数据库），替换 <org-id>
+neon projects create --name wildman-repair-hub --org-id <org-id> --output json
+```
+
+创建成功后会返回 `connection_uris[0].connection_uri`，形如：
+
+```
+postgresql://neondb_owner:<password>@ep-xxx.region.aws.neon.tech/neondb?sslmode=require
+```
+
+记下这个连接串，下一步会用到。
+
+### 第二步：代码适配（SQLite 到 PostgreSQL）
+
+生产环境使用 PostgreSQL，需要两处代码改动：
+
+1. `prisma/schema.prisma` 切换 provider：
+
+```prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+```
+
+2. `package.json` 添加 `prebuild` 钩子，确保每次部署自动重新生成 Prisma 客户端：
+
+```json
+"scripts": {
+  "prebuild": "prisma generate",
+  "build": "next build"
+}
+```
+
+### 第三步：配置 Vercel 环境变量
+
+```bash
+# 登录 Vercel（浏览器完成 OAuth）
+vercel login
+
+# 关联项目（在项目根目录执行）
+vercel link --yes
+
+# 设置三个环境变量到全部环境（production / preview / development）
+echo "<Neon 连接串>" | vercel env add DATABASE_URL production --yes
+echo "<Neon 连接串>" | vercel env add DATABASE_URL preview --yes
+echo "<Neon 连接串>" | vercel env add DATABASE_URL development --yes
+echo "local-deterministic" | vercel env add AI_PROVIDER production --yes
+echo "local-deterministic" | vercel env add AI_PROVIDER preview --yes
+echo "local-deterministic" | vercel env add AI_PROVIDER development --yes
+echo "true" | vercel env add DEMO_MODE production --yes
+echo "true" | vercel env add DEMO_MODE preview --yes
+echo "true" | vercel env add DEMO_MODE development --yes
+```
+
+`DATABASE_URL` 会被标记为 **Sensitive**（加密存储），属正常安全行为。
+
+### 第四步：推送代码并写入种子数据
+
+```bash
+# 本地 .env 指向 Neon 数据库，然后同步表结构
+npx prisma db push
+
+# 写入 Demo 种子数据（3 店、9 设备、6 责任方、10 规则、20 故障事件、19 工单）
+npm run db:seed
+
+# 提交并推送（自动触发 Vercel 部署）
+git add -A
+git commit -m "chore: deploy to Vercel with Neon Postgres"
+git push origin main
+```
+
+### 第五步：验证部署
+
+```bash
+# 查看部署状态
+vercel ls
+
+# 查看构建日志
+vercel logs <deployment-url>
+```
+
+部署完成后用 API 验证数据库连通：
+
+```bash
+curl https://<你的域名>/api/bootstrap
+```
+
+返回包含 `stores`、`assets`、`workOrders` 等字段的完整 JSON 即表示成功。
+
+### 验证 Neon 数据库（CLI）
+
+```bash
+# 查看项目
+neon projects list --org-id <org-id>
+
+# 查看数据库
+neon databases list --project-id <project-id> --org-id <org-id>
+
+# 查看分支状态
+neon branches list --project-id <project-id> --org-id <org-id>
+
+# 获取连接串
+neon connection-string --project-id <project-id> --org-id <org-id>
+```
+
+### 重置生产数据
+
+如果 Demo 数据被改乱，重新写入种子即可（表结构不变）：
+
+```bash
+DATABASE_URL="<Neon 连接串>" npm run db:seed
+```
+
+### 常见问题
+
+| 问题 | 原因 | 解决 |
+|---|---|---|
+| `Environment variable not found: DATABASE_URL` | 环境变量没设到对应项目，或部署时变量未生效 | 确认 `vercel env ls` 里 Production 有 DATABASE_URL；重新 `vercel deploy --prod --yes` 触发新部署 |
+| `Prisma engines do not seem to be compatible` | macOS 隔离属性拦截 native 二进制 | 执行 `xattr -cr node_modules && xattr -cr .next` |
+| Vercel 出现两个同名/近似项目 | 重复创建（如 wildman-repair-demo 与 wildman-repair-hub） | 保留一个，另一个在 Dashboard 删除；环境变量要设在实际部署的项目上 |
+| 本地能跑但线上报错 | 本地用 SQLite、线上用 PostgreSQL 配置不同 | 确保 schema provider 是 postgresql 且 prebuild 钩子存在 |
 
 ## 数据库
 
-本项目使用 Prisma + SQLite，数据库文件位于 `prisma/dev.db`。
+本项目使用 Prisma。本地开发默认使用 SQLite（文件位于 `prisma/dev.db`），生产环境使用 Neon PostgreSQL。
 
 ```bash
 # 生成客户端并创建/同步数据库
@@ -142,3 +302,5 @@ npm run screenshots
 - `docs/ASSUMPTIONS_AND_CONFLICTS.md`：证据边界、假设和冲突；
 - `docs/FEISHU_MAPPING.md`：飞书迁移映射；
 - `KNOWN_LIMITATIONS.md`：已知限制。
+
+> 生产部署相关配置（Vercel 项目 ID、Neon 项目 ID、环境变量）不提交到仓库，通过 Vercel Dashboard 和 Neon CLI 管理。
