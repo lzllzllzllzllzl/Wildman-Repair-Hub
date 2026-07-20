@@ -1,3 +1,19 @@
+<img width="1440" height="1786" alt="image" src="https://github.com/user-attachments/assets/05a11808-fb43-4713-bf2b-b733fab72a2e" />门店报修与完整性检查：<img width="1440" height="1260" alt="image" src="https://github.com/user-attachments/assets/f0922d97-434d-495a-aa33-0c52829f5199" />
+AI 分析与规则路由结构化建议、置信度和规则命中结果分层展示。：<img width="1094" height="676" alt="image" src="https://github.com/user-attachments/assets/6f09a032-c5ef-444c-a1e5-1010dd845c38" />
+维修管理人工复核低置信度、高风险和冲突情况保留人工决策权。：<img width="1440" height="1798" alt="image" src="https://github.com/user-attachments/assets/4f7d9b1a-09c5-429e-9bf1-cb8c270e3bc6" />
+供应商任务处理供应商在权限和状态机约束下接单、维修并提交结果。<img width="1440" height="1000" alt="image" src="https://github.com/user-attachments/assets/469e3263-5947-4655-abbe-0bf089487acf" />
+SLA 异常升!演示即将超时、已经超时、人工介入和重新派发。<img width="1440" height="1729" alt="image" src="https://github.com/user-attachments/assets/69e343d4-61b2-4f0a-8508-071e631e2139" />
+
+门店验收维修结果必须经过门店确认；不通过则进入原工单返修。<img width="1440" height="1786" alt="image" src="https://github.com/user-attachments/assets/88ce7784-efcd-4a2a-91e6-cab269893740" />
+
+设备维修履历将报修事实、处理过程、验收结果沉淀到设备维度。<img width="1440" height="1135" alt="image" src="https://github.com/user-attachments/assets/ef0631c4-c1c6-4aa3-8431-7e13d2aef8ae" />
+
+运营视角 <img width="1440" height="1000" alt="image" src="https://github.com/user-attachments/assets/41101931-bd00-4cf3-8f6d-26789b70215e" />
+
+
+
+
+
 # 野人先生 AI 设备维修协同中枢
 
 **面向连锁门店设备维修协同场景的 AI 产品 PoC / 全栈业务原型。**
@@ -16,14 +32,15 @@
 
 ### 门店报修与完整性检查
 
-![Store fault reporting interface](./docs/images/01-store-report.png)
+![Store fault reporting interface]()
 
 门店以自然语言描述故障，系统保留原始事实，并在进入正式工单前检查关键信息是否完整。
 
 <table>
   <tr>
     <td width="50%">
-      <img src="./docs/images/02-ai-analysis-routing.png" alt="AI analysis and deterministic routing" />
+      <img src="<img width="1440" height="1260" alt="image" src="https://github.com/user-attachments/assets/705e63fd-aca4-45a0-9718-446fb42ae74a" />
+" alt="AI analysis and deterministic routing" />
       <br /><strong>AI 分析与规则路由</strong><br />结构化建议、置信度和规则命中结果分层展示。
     </td>
     <td width="50%">
