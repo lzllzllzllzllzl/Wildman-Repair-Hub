@@ -1,26 +1,10 @@
-<img width="1440" height="1786" alt="image" src="https://github.com/user-attachments/assets/05a11808-fb43-4713-bf2b-b733fab72a2e" />门店报修与完整性检查：<img width="1440" height="1260" alt="image" src="https://github.com/user-attachments/assets/f0922d97-434d-495a-aa33-0c52829f5199" />
-AI 分析与规则路由结构化建议、置信度和规则命中结果分层展示。：<img width="1094" height="676" alt="image" src="https://github.com/user-attachments/assets/6f09a032-c5ef-444c-a1e5-1010dd845c38" />
-维修管理人工复核低置信度、高风险和冲突情况保留人工决策权。：<img width="1440" height="1798" alt="image" src="https://github.com/user-attachments/assets/4f7d9b1a-09c5-429e-9bf1-cb8c270e3bc6" />
-供应商任务处理供应商在权限和状态机约束下接单、维修并提交结果。<img width="1440" height="1000" alt="image" src="https://github.com/user-attachments/assets/469e3263-5947-4655-abbe-0bf089487acf" />
-SLA 异常升!演示即将超时、已经超时、人工介入和重新派发。<img width="1440" height="1729" alt="image" src="https://github.com/user-attachments/assets/69e343d4-61b2-4f0a-8508-071e631e2139" />
-
-门店验收维修结果必须经过门店确认；不通过则进入原工单返修。<img width="1440" height="1786" alt="image" src="https://github.com/user-attachments/assets/88ce7784-efcd-4a2a-91e6-cab269893740" />
-
-设备维修履历将报修事实、处理过程、验收结果沉淀到设备维度。<img width="1440" height="1135" alt="image" src="https://github.com/user-attachments/assets/ef0631c4-c1c6-4aa3-8431-7e13d2aef8ae" />
-
-运营视角 <img width="1440" height="1000" alt="image" src="https://github.com/user-attachments/assets/41101931-bd00-4cf3-8f6d-26789b70215e" />
-
-
-
-
-
 # 野人先生 AI 设备维修协同中枢
 
 **面向连锁门店设备维修协同场景的 AI 产品 PoC / 全栈业务原型。**
 
 本项目验证从门店自然语言报修、AI 信息结构化、确定性规则路由、人工复核、供应商处理，到门店验收和设备维修履历沉淀的完整业务闭环。
 
-[Live Demo](https://yeren-repair-optimization-platform.vercel.app) · [Demo Guide](./DEMO_SCRIPT.md) · [Case Study](./docs/PORTFOLIO_CASE_STUDY.md) · [Source Code](https://github.com/echoehco79-cpu/yeren-repair-optimization-platform)
+[Live Demo](https://wildman-repair-demo.vercel.app/) · [Demo Guide](./DEMO_SCRIPT.md) · [Case Study](./docs/PORTFOLIO_CASE_STUDY.md) · [Source Code](https://github.com/lzllzllzllzllzl/Wildman-Repair-Hub)
 
 > **模拟数据声明：** 本项目为独立产品研究与全栈原型。所有门店、设备、供应商、SLA、联系方式、维修案例和运营指标均为 Demo 模拟数据，不代表野人先生真实内部流程、制度或运营情况；项目并非企业官方系统，也未接入企业生产数据。
 
@@ -28,53 +12,70 @@ SLA 异常升!演示即将超时、已经超时、人工介入和重新派发。
 
 **English summary:** *An AI-assisted maintenance collaboration PoC for multi-store retail operations, covering unstructured fault reporting, information extraction, deterministic routing, human review, supplier execution, store acceptance, SLA escalation, and asset maintenance history. All business data is simulated for demonstration and feasibility validation.*
 
+# 目录
+
+- [Product Preview](#product-preview)
+- [Project Overview](#project-overview)
+- [The Problem](#the-problem)
+- [Solution](#solution)
+- [Core Workflow](#core-workflow)
+- [Key Product Decisions](#key-product-decisions)
+- [My Role and Contribution](#my-role-and-contribution)
+- [Demo Scenarios](#demo-scenarios)
+- [Validation and Quality](#validation-and-quality)
+- [Technical Architecture](#technical-architecture)
+- [Current Limitations](#current-limitations)
+- [Run Locally](#run-locally)
+- [部署上线](#部署上线)
+- [数据库](#数据库)
+- [Documentation](#documentation)
+
+---
+
 ## Product Preview
-
-### 门店报修与完整性检查
-
-![Store fault reporting interface]()
-
-门店以自然语言描述故障，系统保留原始事实，并在进入正式工单前检查关键信息是否完整。
 
 <table>
   <tr>
     <td width="50%">
-      <img src="<img width="1440" height="1260" alt="image" src="https://github.com/user-attachments/assets/705e63fd-aca4-45a0-9718-446fb42ae74a" />
-" alt="AI analysis and deterministic routing" />
+      <img src="./docs/images/01-store-report.png" alt="门店报修与完整性检查" />
+      <br /><strong>门店报修与完整性检查</strong><br />自然语言报修，原始事实保留，进入工单前检查完整性。
+    </td>
+    <td width="50%">
+      <img src="./docs/images/02-ai-routing.png" alt="AI 分析与规则路由" />
       <br /><strong>AI 分析与规则路由</strong><br />结构化建议、置信度和规则命中结果分层展示。
     </td>
+  </tr>
+  <tr>
     <td width="50%">
-      <img src="./docs/images/03-manager-review.png" alt="Maintenance manager review" />
+      <img src="./docs/images/03-manager-review.png" alt="维修管理人工复核" />
       <br /><strong>维修管理人工复核</strong><br />低置信度、高风险和冲突情况保留人工决策权。
     </td>
-  </tr>
-  <tr>
     <td width="50%">
-      <img src="./docs/images/04-supplier-task.png" alt="Supplier task processing" />
+      <img src="./docs/images/04-supplier-task.png" alt="供应商任务处理" />
       <br /><strong>供应商任务处理</strong><br />供应商在权限和状态机约束下接单、维修并提交结果。
     </td>
+  </tr>
+  <tr>
     <td width="50%">
-      <img src="./docs/images/05-sla-escalation.png" alt="SLA escalation and reassignment" />
+      <img src="./docs/images/05-sla-escalation.png" alt="SLA 异常升级" />
       <br /><strong>SLA 异常升级</strong><br />演示即将超时、已经超时、人工介入和重新派发。
+    </td>
+    <td width="50%">
+      <img src="./docs/images/06-store-acceptance.png" alt="门店验收" />
+      <br /><strong>门店验收</strong><br />维修结果必须经过门店确认；不通过则进入原工单返修。
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <img src="./docs/images/06-store-acceptance.png" alt="Store repair acceptance" />
-      <br /><strong>门店验收</strong><br />维修结果必须经过门店确认；不通过则进入原工单返修。
+      <img src="./docs/images/07-asset-history.png" alt="设备维修履历" />
+      <br /><strong>设备维修履历</strong><br />将报修事实、处理过程、验收结果沉淀到设备维度。
     </td>
     <td width="50%">
-      <img src="./docs/images/07-asset-history.png" alt="Asset maintenance history" />
-      <br /><strong>设备维修履历</strong><br />将报修事实、处理过程、验收结果沉淀到设备维度。
+      <img src="./docs/images/08-operations-dashboard.png" alt="运营视角" />
+      <br /><strong>运营视角</strong><br />观察 Demo 工单结构、状态与 SLA 风险。
     </td>
   </tr>
 </table>
-
-### 运营视角
-
-![Operations dashboard](./docs/images/08-operations-dashboard.png)
-
-运营看板用于观察 Demo 工单结构、状态与 SLA 风险，不代表真实企业经营指标。
 
 ## Project Overview
 
@@ -97,7 +98,7 @@ SLA 异常升!演示即将超时、已经超时、人工介入和重新派发。
 
 ## Solution
 
-原型以“原始事实不被覆盖、自动化结果可解释、最终责任由人承担”为原则，将 AI 信息提取、确定性业务规则、人工复核、工单状态机和 SLA 异常处理组合成一条可演示的端到端闭环。AI 帮助整理信息，不承担专业诊断和最终责任；规则负责可解释判断；人工处理低置信度、高风险和规则冲突。
+原型以"原始事实不被覆盖、自动化结果可解释、最终责任由人承担"为原则，将 AI 信息提取、确定性业务规则、人工复核、工单状态机和 SLA 异常处理组合成一条可演示的端到端闭环。AI 帮助整理信息，不承担专业诊断和最终责任；规则负责可解释判断；人工处理低置信度、高风险和规则冲突。
 
 ## Core Workflow
 
@@ -135,7 +136,7 @@ flowchart LR
 ### 3. 状态机和权限
 
 - 信息未补充完整前不能提前进入正式工单；
-- 只有“待接单”可以接单，只有“处理中”可以提交维修结果，未经验收不能关闭；
+- 只有"待接单"可以接单，只有"处理中"可以提交维修结果，未经验收不能关闭；
 - 验收不通过进入原工单返修，保留上下文与责任链；
 - 供应商只能处理属于当前责任方的工单；取消、改派和人工定责受到角色权限限制。
 
@@ -215,6 +216,14 @@ flowchart TB
 
 ## Run Locally
 
+### 前置要求
+
+- **Node.js 20 或更高**；
+- **npm 10 或更高**；
+- 本地开发无需外部数据库（生产部署使用 Neon PostgreSQL）；
+- 无需模型 API 密钥；
+- 无需飞书或其他第三方账号。
+
 ### 安装与启动
 
 ```bash
@@ -243,6 +252,180 @@ npm run screenshots
 
 脚本生成的完整测试截图保存在本地 `screenshots/`；作品集筛选图单独维护在 `docs/images/`，避免把全部测试产物提交到仓库。
 
+## 部署上线
+
+本项目生产环境部署在 **Vercel + Neon PostgreSQL**，通过 GitHub 仓库自动触发。
+
+### 架构概览
+
+```
+GitHub (lzllzllzllzllzl/Wildman-Repair-Hub)
+        | push 触发自动部署
+        v
+Vercel (Next.js 15 serverless)
+        | DATABASE_URL
+        v
+Neon PostgreSQL 17 (aws-us-east-1)
+```
+
+| 组件 | 地址 | 说明 |
+|---|---|---|
+| 生产站点 | https://wildman-repair-demo.vercel.app/ | Vercel 托管，main 分支推送即部署 |
+| 源码仓库 | https://github.com/lzllzllzllzllzl/Wildman-Repair-Hub | 公开仓库 |
+| 数据库 | Neon PostgreSQL 17 | 项目 autumn-wind-69981685，库 neondb |
+
+### 前置要求
+
+- Node.js 20+ / npm 10+
+- Vercel CLI：`npm i -g vercel`
+- Neon CLI：`npm i -g neon`
+- 一个 GitHub 账号、一个 Vercel 账号、一个 Neon 账号
+
+### 第一步：创建 Neon 数据库
+
+```bash
+# 登录 Neon（浏览器完成 OAuth）
+neon auth
+
+# 列出已有组织
+neon orgs list
+
+# 创建项目（自动生成数据库），替换 <org-id>
+neon projects create --name wildman-repair-hub --org-id <org-id> --output json
+```
+
+创建成功后会返回 `connection_uris[0].connection_uri`，形如：
+
+```
+postgresql://neondb_owner:<password>@ep-xxx.region.aws.neon.tech/neondb?sslmode=require
+```
+
+记下这个连接串，下一步会用到。
+
+### 第二步：代码适配（SQLite 到 PostgreSQL）
+
+生产环境使用 PostgreSQL，需要两处代码改动：
+
+1. `prisma/schema.prisma` 切换 provider：
+
+```prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+```
+
+2. `package.json` 添加 `prebuild` 钩子，确保每次部署自动重新生成 Prisma 客户端：
+
+```json
+"scripts": {
+  "prebuild": "prisma generate",
+  "build": "next build"
+}
+```
+
+### 第三步：配置 Vercel 环境变量
+
+```bash
+# 登录 Vercel（浏览器完成 OAuth）
+vercel login
+
+# 关联项目（在项目根目录执行）
+vercel link --yes
+
+# 设置三个环境变量到全部环境（production / preview / development）
+echo "<Neon 连接串>" | vercel env add DATABASE_URL production --yes
+echo "<Neon 连接串>" | vercel env add DATABASE_URL preview --yes
+echo "<Neon 连接串>" | vercel env add DATABASE_URL development --yes
+echo "local-deterministic" | vercel env add AI_PROVIDER production --yes
+echo "local-deterministic" | vercel env add AI_PROVIDER preview --yes
+echo "local-deterministic" | vercel env add AI_PROVIDER development --yes
+echo "true" | vercel env add DEMO_MODE production --yes
+echo "true" | vercel env add DEMO_MODE preview --yes
+echo "true" | vercel env add DEMO_MODE development --yes
+```
+
+`DATABASE_URL` 会被标记为 **Sensitive**（加密存储），属正常安全行为。
+
+### 第四步：推送代码并写入种子数据
+
+```bash
+# 本地 .env 指向 Neon 数据库，然后同步表结构
+npx prisma db push
+
+# 写入 Demo 种子数据（3 店、9 设备、6 责任方、10 规则、20 故障事件、19 工单）
+npm run db:seed
+
+# 提交并推送（自动触发 Vercel 部署）
+git add -A
+git commit -m "chore: deploy to Vercel with Neon Postgres"
+git push origin main
+```
+
+### 第五步：验证部署
+
+```bash
+# 查看部署状态
+vercel ls
+
+# 查看构建日志
+vercel logs <deployment-url>
+```
+
+部署完成后用 API 验证数据库连通：
+
+```bash
+curl https://<你的域名>/api/bootstrap
+```
+
+返回包含 `stores`、`assets`、`workOrders` 等字段的完整 JSON 即表示成功。
+
+### 验证 Neon 数据库（CLI）
+
+```bash
+# 查看项目
+neon projects list --org-id <org-id>
+
+# 查看数据库
+neon databases list --project-id <project-id> --org-id <org-id>
+
+# 查看分支状态
+neon branches list --project-id <project-id> --org-id <org-id>
+
+# 获取连接串
+neon connection-string --project-id <project-id> --org-id <org-id>
+```
+
+### 重置生产数据
+
+如果 Demo 数据被改乱，重新写入种子即可（表结构不变）：
+
+```bash
+DATABASE_URL="<Neon 连接串>" npm run db:seed
+```
+
+### 常见问题
+
+| 问题 | 原因 | 解决 |
+|---|---|---|
+| `Environment variable not found: DATABASE_URL` | 环境变量没设到对应项目，或部署时变量未生效 | 确认 `vercel env ls` 里 Production 有 `DATABASE_URL`；重新 `vercel deploy --prod --yes` 触发新部署 |
+| `Prisma engines do not seem to be compatible` | macOS 隔离属性拦截 native 二进制 | 执行 `xattr -cr node_modules && xattr -cr .next` |
+| Vercel 出现两个同名/近似项目 | 重复创建（如 `wildman-repair-demo` 与 `wildman-repair-hub`） | 保留一个，另一个在 Dashboard 删除；环境变量要设在实际部署的项目上 |
+| 本地能跑但线上报错 | 本地用 SQLite、线上用 PostgreSQL 配置不同 | 确保 schema provider 是 `postgresql` 且 `prebuild` 钩子存在 |
+
+## 数据库
+
+本项目使用 Prisma。本地开发默认使用 SQLite（文件位于 `prisma/dev.db`），生产环境使用 Neon PostgreSQL。
+
+```bash
+# 生成客户端并创建/同步数据库
+npx prisma generate
+npx prisma db push
+
+# 查看数据（可选）
+npx prisma studio
+```
+
 ## Documentation
 
 - [Portfolio Case Study](./docs/PORTFOLIO_CASE_STUDY.md) — 面向招聘人员与面试官的项目案例
@@ -259,3 +442,5 @@ npm run screenshots
 ---
 
 本仓库用于作品集展示、产品讨论与技术可行性验证。任何生产化判断，都应在完成企业访谈、数据合规评估、安全设计和真实环境验证后再作出。
+
+> 生产部署相关配置（Vercel 项目 ID、Neon 项目 ID、环境变量）不提交到仓库，通过 Vercel Dashboard 和 Neon CLI 管理。
