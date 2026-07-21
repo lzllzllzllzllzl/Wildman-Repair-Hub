@@ -37,41 +37,41 @@
 <table>
   <tr>
     <td width="50%">
-      <img src="./docs/images/01-store-report.png" alt="门店报修与完整性检查" />
+      <img src="https://github.com/user-attachments/assets/05a11808-fb43-4713-bf2b-b733fab72a2e" alt="门店报修与完整性检查" />
       <br /><strong>门店报修与完整性检查</strong><br />自然语言报修，原始事实保留，进入工单前检查完整性。
     </td>
     <td width="50%">
-      <img src="./docs/images/02-ai-routing.png" alt="AI 分析与规则路由" />
+      <img src="https://github.com/user-attachments/assets/f0922d97-434d-495a-aa33-0c52829f5199" alt="AI 分析与规则路由" />
       <br /><strong>AI 分析与规则路由</strong><br />结构化建议、置信度和规则命中结果分层展示。
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <img src="./docs/images/03-manager-review.png" alt="维修管理人工复核" />
+      <img src="https://github.com/user-attachments/assets/6f09a032-c5ef-444c-a1e5-1010dd845c38" alt="维修管理人工复核" />
       <br /><strong>维修管理人工复核</strong><br />低置信度、高风险和冲突情况保留人工决策权。
     </td>
     <td width="50%">
-      <img src="./docs/images/04-supplier-task.png" alt="供应商任务处理" />
+      <img src="https://github.com/user-attachments/assets/4f7d9b1a-09c5-429e-9bf1-cb8c270e3bc6" alt="供应商任务处理" />
       <br /><strong>供应商任务处理</strong><br />供应商在权限和状态机约束下接单、维修并提交结果。
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <img src="./docs/images/05-sla-escalation.png" alt="SLA 异常升级" />
+      <img src="https://github.com/user-attachments/assets/469e3263-5947-4655-abbe-0bf089487acf" alt="SLA 异常升级" />
       <br /><strong>SLA 异常升级</strong><br />演示即将超时、已经超时、人工介入和重新派发。
     </td>
     <td width="50%">
-      <img src="./docs/images/06-store-acceptance.png" alt="门店验收" />
+      <img src="https://github.com/user-attachments/assets/69e343d4-61b2-4f0a-8508-071e631e2139" alt="门店验收" />
       <br /><strong>门店验收</strong><br />维修结果必须经过门店确认；不通过则进入原工单返修。
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <img src="./docs/images/07-asset-history.png" alt="设备维修履历" />
+      <img src="https://github.com/user-attachments/assets/88ce7784-efcd-4a2a-91e6-cab269893740" alt="设备维修履历" />
       <br /><strong>设备维修履历</strong><br />将报修事实、处理过程、验收结果沉淀到设备维度。
     </td>
     <td width="50%">
-      <img src="./docs/images/08-operations-dashboard.png" alt="运营视角" />
+      <img src="https://github.com/user-attachments/assets/41101931-bd00-4cf3-8f6d-26789b70215e" alt="运营视角" />
       <br /><strong>运营视角</strong><br />观察 Demo 工单结构、状态与 SLA 风险。
     </td>
   </tr>
